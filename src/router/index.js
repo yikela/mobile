@@ -99,6 +99,18 @@ export default new Router({
       name: "accountBalance",
       component: resolve => require(['@/components/my/accountBalance'], resolve),
       meta:{keepAlive:false},
+      beforeEnter: (to, from, next) => {
+        if (!localStorage.getItem('winchaintoken')) {
+            next({
+                path: '/login',
+                query: {
+                    redirect: to.fullPath
+                }
+            })
+          } else {
+              next()
+          }
+      }
     },
     {
       path: "/accountDetail",
@@ -110,6 +122,12 @@ export default new Router({
       path: "/recharge",
       name: "recharge",
       component: resolve => require(['@/components/my/recharge'], resolve),
+      meta:{keepAlive:false},
+    },
+    {
+      path: "/exchangeList",
+      name: "exchangeList",
+      component: resolve => require(['@/components/my/exchangeList'], resolve),
       meta:{keepAlive:false},
     },
     {

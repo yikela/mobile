@@ -10,7 +10,7 @@
           <p>标题：{{item.description.name}}</p>
           <p><span class="winner">获得者：{{item.winner_username}} </span><span class="total">夺宝：{{item.price}}人次</span></p>
           <p>商品价值：{{item.price}}平台币</p>
-          <p>揭晓时间：{{item.updated_at | formDate}}</p>
+          <p>揭晓时间：{{item.updated_at | dateFormat}}</p>
           <p>中奖号码：{{item.calc_result}}</p>
           <router-link class="moreDetail" :to="{name: 'winnerDetail', params: { id: item.id}}">查看详情</router-link>
         </div>
@@ -24,7 +24,6 @@
 <script>
 import MiniRefreshTools from 'minirefresh';
 import 'minirefresh/dist/debug/minirefresh.css'
-import moment from 'moment'
 import {
     mapState,
     mapGetters,
@@ -50,9 +49,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   filters:{
-    formDate(str){
-      return moment(str*1000).format('YYYY-MM-DD HH:mm')
-    }
+    dateFormat
   },
   methods:{
     ...mapMutations(['USER_SIGNIN']),

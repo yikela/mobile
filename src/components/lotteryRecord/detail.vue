@@ -6,7 +6,7 @@
           <p>{{item.description['round no']}}期  {{item.description.name}}夺宝</p>
           <p><span class="winner">获得者：{{item.winner_username}} </span><span class="total">夺宝：{{item.price}}人次</span></p>
           <p>商品价值：{{item.price}}平台币</p>
-          <p>揭晓时间：{{item.updated_at | formDate}}</p>
+          <p>揭晓时间：{{item.updated_at | dateFormat}}</p>
           <p>中奖号码：{{item.calc_result}}</p>
         </div>
     </div>
@@ -26,7 +26,7 @@
         </thead>
         <tbody>
           <tr v-for="(item,index) in allResultDetail" :key="index" v-if="allResultDetail.length != 0">
-            <td>{{item.created_at | formDate}}</td>
+            <td>{{item.created_at * 1000 | formDate}}</td>
             <td>{{item.username}}</td>
             <td> {{item.buy_count}}</td>
           </tr>
@@ -53,8 +53,8 @@ import {
     mapMutations,
     mapActions
   } from 'vuex'
-import moment from 'moment'
-import { Tab, TabItem , XTable } from 'vux'
+import { Tab, TabItem , XTable ,dateFormat} from 'vux'
+import {  } from 'vux'
 export default {
   name: 'detail',
   data () {
@@ -78,9 +78,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   filters:{
-    formDate(str){
-      return moment(str*1000).format('YYYY-MM-DD HH:mm')
-    }
+    dateFormat
   },
   methods:{
     ...mapMutations(['USER_SIGNIN']),

@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <tr v-for="(i,index) in items" :key="index">
-            <td>{{i.created_at | formDate}}</td>
+            <td>{{i.created_at *1000 | dateFormat}}</td>
             <th>{{i.amount}}{{coinType[i.coin_type]}}</th>
             <th>{{Number(i.token_amount).toFixed(2)}}</th>
             <th>{{Number(i.rate).toFixed(2)}}</th>
@@ -31,8 +31,7 @@ import {
     mapMutations,
     mapActions
   } from 'vuex'
-import { XTable } from 'vux'
-import moment from 'moment'
+import { XTable,dateFormat } from 'vux'
 import coinType from '../../utils/coin_type'
 export default {
   name: 'recharge',
@@ -62,9 +61,7 @@ export default {
     }
   },
   filters:{
-    formDate(str){
-      return moment(str*1000).format('YYYY-MM-DD HH:mm')
-    }
+    dateFormat
   },
   created(){
     this.coinType = coinType

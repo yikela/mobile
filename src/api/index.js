@@ -78,6 +78,10 @@ const restApi = (() => {
         getMyCoin:{
           url:'/1/user/balance'
         },
+        // 获取游戏币的汇率
+        getExchangeRate:{
+          url:'/1/exchange-rate/exchange-rate'
+        },
         get(api_url, urlParams, success){
             return ajax.get(makeApiUrl(api_url, urlParams))
         },

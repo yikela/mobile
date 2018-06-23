@@ -51,7 +51,8 @@ export default {
         this.userLogin(params).then(res => {
             if(res.data.code == 200){
               this.USER_SIGNIN(res.data.session);
-              this.$router.push('/')
+              this.$router.push('/');
+              console.log(this.$router)
             }else{
               this.$vux.toast.text(res.data.msg.zh, 'top');
             }

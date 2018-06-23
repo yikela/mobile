@@ -18,7 +18,7 @@
             <th>{{i.amount}}</th>
             <router-link to="/recharge" tag="th" style="color:blue">充值</router-link>
             <router-link to="/" tag="th" style="color:blue">提币</router-link>
-            <router-link to="/" tag="th" style="color:blue">兑换夺宝币</router-link>
+            <router-link to="/exchangeList" tag="th" style="color:blue">兑换夺宝币</router-link>
           </tr>
            <tr>
             <td>夺宝币</td>

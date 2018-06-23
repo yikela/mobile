@@ -45,7 +45,7 @@
 
           <load-more tip="正在加载" :show-loading="true" v-if="loading"></load-more>
           <tr v-for="(item,index) in allResultDetail" :key="index" v-if="allResultDetail.length != 0 && !loading">
-            <td>{{item.created_at | formDate}}</td>
+            <td>{{item.created_at * 1000 | dateFormat}}</td>
             <td>{{item.username}}</td>
             <td> {{item.buy_count}}</td>
           </tr>
@@ -81,8 +81,7 @@ import {
     mapMutations,
     mapActions
   } from 'vuex'
-import moment from 'moment'
-import { Tab, TabItem , XTable ,XNumber,Group,XInput,XButton} from 'vux'
+import { Tab, TabItem , XTable ,XNumber,Group,XInput,XButton,dateFormat} from 'vux'
 export default {
   name: 'detail',
   data () {
@@ -113,9 +112,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   filters:{
-    formDate(str){
-      return moment(str*1000).format('YYYY-MM-DD HH:mm')
-    }
+    dateFormat,
   },
   methods:{
     ...mapMutations(['USER_SIGNIN']),

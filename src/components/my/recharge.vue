@@ -37,7 +37,7 @@ import {
     mapActions
   } from 'vuex'
 import { Checker, CheckerItem, Divider, Group, Cell, Popup, TransferDom,Qrcode } from 'vux'
-
+import coinType from '../../utils/coin_type'
 export default {
   name: 'recharge',
   data () {
