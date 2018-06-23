@@ -17,7 +17,7 @@
               <th>{{i.amount}}</th>
               <th>{{rate[i.coin_type]}}</th>
               <th>{{i.amount * rate[i.coin_type]}}</th>
-              <router-link to="/exchange" tag="th" style="color:blue">兑换</router-link>
+              <router-link :to="{path:'exchange',query:{amount:i.amount * rate[i.coin_type],type:i.coin_type}}" tag="th" style="color:blue">兑换</router-link>
             </tr>
         </tbody>
       </x-table>
@@ -31,7 +31,7 @@ import {
     mapMutations,
     mapActions
   } from 'vuex'
-import coinType from '../../utils/coin_type'
+import coinType from '../../../../utils/coin_type'
 import { XTable } from 'vux'
 import { POINT_CONVERSION_COMPRESSED } from 'constants';
 export default {

@@ -82,6 +82,10 @@ const restApi = (() => {
         getExchangeRate:{
           url:'/1/exchange-rate/exchange-rate'
         },
+        //兑换游戏币
+        exchangeGameCoin:{
+            url:"/1/asset/to-game-token"
+        },
         get(api_url, urlParams, success){
             return ajax.get(makeApiUrl(api_url, urlParams))
         },

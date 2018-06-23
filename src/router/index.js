@@ -79,7 +79,7 @@ export default new Router({
     {
       path: "/my/order",
       name: "myOrder",
-      component: resolve => require(['@/components/my/myOrder'], resolve),
+      component: resolve => require(['@/components/my/order/myOrder'], resolve),
       meta:{keepAlive:false},
       beforeEnter: (to, from, next) => {
         if (!localStorage.getItem('winchaintoken')) {
@@ -97,7 +97,7 @@ export default new Router({
     {
       path: "/accountBalance",
       name: "accountBalance",
-      component: resolve => require(['@/components/my/accountBalance'], resolve),
+      component: resolve => require(['@/components/my/fundManage/accountBalance'], resolve),
       meta:{keepAlive:false},
       beforeEnter: (to, from, next) => {
         if (!localStorage.getItem('winchaintoken')) {
@@ -115,25 +115,31 @@ export default new Router({
     {
       path: "/accountDetail",
       name: "accountDetail",
-      component: resolve => require(['@/components/my/accountDetail'], resolve),
+      component: resolve => require(['@/components/my/fundManage/accountDetail'], resolve),
       meta:{keepAlive:false},
     },
     {
       path: "/recharge",
       name: "recharge",
-      component: resolve => require(['@/components/my/recharge'], resolve),
+      component: resolve => require(['@/components/my/fundManage/recharge/recharge'], resolve),
       meta:{keepAlive:false},
     },
     {
       path: "/exchangeList",
       name: "exchangeList",
-      component: resolve => require(['@/components/my/exchangeList'], resolve),
+      component: resolve => require(['@/components/my/fundManage/exchange/exchangeList'], resolve),
       meta:{keepAlive:false},
+    },
+    {
+      path: "/exchange",
+      name: "exchange",
+      component: resolve => require(['@/components/my/fundManage/exchange/exchange'], resolve),
+      meta: { keepAlive: false },
     },
     {
       path: "/payment",
       name: "payment",
-      component: resolve => require(['@/components/my/payment'], resolve),
+      component: resolve => require(['@/components/my/fundManage/recharge/payment'], resolve),
       meta:{keepAlive:false},
     },
     {

@@ -41,7 +41,7 @@ import {
     mapActions
   } from 'vuex'
 import { XTable } from 'vux'
-import coinType from '../../utils/coin_type'
+import coinType from '../../../utils/coin_type'
 export default {
   name: 'accountBalance',
   data () {

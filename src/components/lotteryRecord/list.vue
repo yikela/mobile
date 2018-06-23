@@ -30,14 +30,14 @@ import {
     mapMutations,
     mapActions
   } from 'vuex'
-
+import {dateFormat} from 'vux'
 export default {
   name: 'temp',
   data () {
     return {
       items: [],
       minirefresh: null,
-      maxDataSize: 30,
+      maxDataSize: 10,
       requestDelayTime: 600,
       dataStamp: [],
     }
@@ -76,7 +76,7 @@ export default {
         self.get_list()
         setTimeout(function() {
             self.items = self.items.concat(self.dataStamp);
-            self.miniRefresh.endUpLoading(self.items.length >= self.maxDataSize ? true : false);
+            self.miniRefresh.endUpLoading(self.dataStamp.length < self.maxDataSize ? true : false);
         }, self.requestDelayTime);
     },
   },

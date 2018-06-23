@@ -57,20 +57,20 @@ export default {
       var regPhone = /^1(3|4|5|7|8)\d{9}$/;
       var regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
       if(!this.phone || !this.messagecode || !this.password || !this.secPassword || !this.email){
-        this.$vux.toast.text('请填写相关信息', 'top');
+        alert('请填写相关信息');
         return false
       }
       if (!regPhone.test(this.phone)) {
-          this.$vux.toast.text('手机号码格式不正确', 'top');
+          alert('手机号码格式不正确');
           return false
       }
       if (!regEmail.test(this.email)) {
-          this.$vux.toast.text('邮箱格式不正确', 'top');
+         alert('邮箱格式不正确');
           return false
       }
 
       if(this.password !== this.secPassword){
-        this.$vux.toast.text('两次密码不一致', 'top');
+        alert('两次密码不一致');
           return false
       }
       
@@ -85,9 +85,10 @@ export default {
         };
         API.post(API.register.url,{},params).then(res => {
           if(res.data.code == 200){
+            console.log(res)
             this.$router.push('/login')
           }else{
-             this.$vux.toast.text(res.data.msg, 'top');
+             alert(res.data.msg);
           }
         })
     },

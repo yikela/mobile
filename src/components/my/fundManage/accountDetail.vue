@@ -1,28 +1,23 @@
 <template>
-  <div class="myOrder">
-    <h4>我的订单</h4>
-
+  <div class="accountDetail">
+    <p class="backtobalance"><a href="javascript:history.back(-1)">账户余额</a></p>
+    <h4>账户明细</h4>
     <x-table :cell-bordered="false" style="background-color:#fff;">
         <thead>
           <tr>
-            <th>图片</th>
-            <th>名称</th>
-            <th>状态</th>
-            <th>次数</th>
-            <th>操作</th>
+            <th>日期</th>
+            <th>类型</th>
+            <th>币种</th>
+            <th>数量</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in items" :key="index" v-if="items.length > 0">
-            <td><img src="../../assets/bit.jpg"></td>
-            <th>1</th>
-            <th>2</th>
-            <th>{{item.buy_count}}</th>
-            <th>3</th>
+          <tr>
+            <td>2018.5.18</td>
+            <th>充值</th>
+            <th>BTC</th>
+            <th>+2</th>
           </tr>
-          <!-- <tr v-if="items.length == 0" style="text-align:center;width:100%;">
-            暂无订单
-          </tr> -->
         </tbody>
       </x-table>
 
@@ -37,12 +32,14 @@ import {
     mapActions
   } from 'vuex'
 import { XTable } from 'vux'
+import coinType from '../../../utils/coin_type'
 export default {
-  name: 'myOrder',
+  name: 'accountDetail',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      items:[]
+      items:[],
+      coinType:null,
     }
   },
   components:{
@@ -55,16 +52,10 @@ export default {
     ...mapMutations(['USER_SIGNIN']),
     ...mapActions(['userLogout', 'userLogin']),
     getList(){
-      API.get(API.boughtList.url+`?only_me=yes&session=${this.userLoginToken}`,{},{}).then(res => {
-        console.log(res);
-        if(res.data.code == 200){
-          this.items = res.data.data
-        }
-      })
     }
   },
   created(){
-
+    this.coinType = coinType
   },
   mounted(){
     this.getList()
@@ -91,5 +82,12 @@ tr td img{
   bottom:0;
   position: absolute;
   margin:auto;
+}
+.backtobalance{
+  width:100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: right;
+  padding:0 10px;
 }
 </style>

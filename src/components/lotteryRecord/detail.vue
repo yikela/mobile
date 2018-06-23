@@ -54,7 +54,6 @@ import {
     mapActions
   } from 'vuex'
 import { Tab, TabItem , XTable ,dateFormat} from 'vux'
-import {  } from 'vux'
 export default {
   name: 'detail',
   data () {

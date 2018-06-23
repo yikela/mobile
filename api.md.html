@@ -225,7 +225,7 @@ password2: string
   &quot;code&quot;: 200, // successful if 200 otherwise fail.
 }
 </code></pre>
-<h1><a id="GET_1userbalance_277"></a>[GET] /1/user/balance</h1>
+<h1><a id="GET_1userbalance_277"></a>[GET] 1/user/balance</h1>
 <p>description: 当前用户可用的游戏币.<br>
 params:</p>
 <pre><code>session: SESSION_TOKEN
@@ -236,7 +236,7 @@ params:</p>
   &quot;data&quot;: amount of game tokens
 }
 </code></pre>
-<h1><a id="GET_1refamount_292"></a>[GET] /1/ref/amount</h1>
+<h1><a id="GET_1refamount_292"></a>[GET] 1/ref/amount</h1>
 <p>description: current user’s rewarded amount because of your recommended users’ top-up.<br>
 params:</p>
 <pre><code>session: SESSION_TOKEN
@@ -247,7 +247,7 @@ params:</p>
   &quot;data&quot;: amount of awarded amount
 }
 </code></pre>
-<h1><a id="POST_1refcash_307"></a>[POST] /1/ref/cash</h1>
+<h1><a id="POST_1refcash_307"></a>[POST] 1/ref/cash</h1>
 <p>description: 将推荐奖励兑换为游戏币.<br>
 params:</p>
 <pre><code>session: SESSION_TOKEN
@@ -256,6 +256,240 @@ amount: the number of rewarded amount you want to exchange
 <p>return:</p>
 <pre><code>{
   &quot;code&quot;: 200, // successful if 200 otherwise fail.
+}
+</code></pre>
+<h1><a id="GET_1merchantpaymentaddress_322"></a>[GET] 1/merchant/payment-address</h1>
+<p>description: 获得充币地址.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+coin_type: int, 币种
+</code></pre>
+<p>return:</p>
+<pre><code>{
+  &quot;code&quot;: 200, // successful if 200 otherwise fail.
+  &quot;data&quot;: 地址
+}
+</code></pre>
+<h1><a id="POST_1merchantcash_338"></a>[POST] 1/merchant/cash</h1>
+<p>description: 提币（测试期间暂时关闭）.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+coin_type: int, 币种
+address: 币地址
+number: string_number: 数量
+</code></pre>
+<p>return:</p>
+<pre><code>{
+  &quot;code&quot;: 200, // successful if 200 otherwise fail.
+}
+</code></pre>
+<h1><a id="GET_1userpaymentlist_355"></a>[GET] 1/user-payment/list</h1>
+<p>description: 获取充值记录.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+cursor_id: 可选，分页游标id
+</code></pre>
+<p>return:</p>
+<pre><code>{  
+   &quot;code&quot;:200,
+   &quot;data&quot;:[  
+      // ...
+      {  
+         &quot;amount&quot;:&quot;0.0005000000&quot;,  // 充值时的虚拟币数量
+         &quot;coin_type&quot;:1,  // 币种
+         &quot;created_at&quot;:1527496592,
+         &quot;id&quot;:53,
+         &quot;rate&quot;:&quot;50000.0000000000&quot;,  // 充值时的汇率
+         &quot;state&quot;:null,
+         &quot;token_amount&quot;:&quot;25.0000000000&quot;  // 充值游戏币数量
+      },
+      // ...
+   ],
+   &quot;session&quot;:&quot;57ebff617c8fb1f33e798db5c47a55c8&quot;
+}
+</code></pre>
+<h1><a id="GET_1paymentpasswordisset_392"></a>[GET] 1/payment-password/is-set</h1>
+<p>description: 资金密码是否已设置.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+</code></pre>
+<p>return:</p>
+<pre><code>{  
+   &quot;code&quot;:200,  // 200表示已经设置，其它表示未设置。
+}
+</code></pre>
+<h1><a id="POST_1paymentpasswordnew_406"></a>[POST] 1/payment-password/new</h1>
+<p>description: 设置或修改资金密码.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+captcha: string, 手机验证码（需事先调用1/register/new-captcha获取）
+password: string, 设置的密码
+</code></pre>
+<p>return:</p>
+<pre><code>{  
+   &quot;code&quot;:200,  // 200表示已经设置成功，其它表示失败。
+}
+</code></pre>
+<h1><a id="GET_1exchangerateexchangerate_421"></a>[GET] 1/exchange-rate/exchange-rate</h1>
+<p>description: 获取游戏币汇率.<br>
+params:</p>
+<pre><code>coin_type： int, any of [BITCOIN = 1]
+</code></pre>
+<p>return:</p>
+<pre><code>{  
+   &quot;code&quot;:200,
+   &quot;data&quot;: 汇率
+}
+</code></pre>
+<h1><a id="GET_1assetlist_436"></a>[GET] /1/asset/list</h1>
+<p>description: 获取用户的资产列表.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+</code></pre>
+<p>return:</p>
+<pre><code>{  
+   &quot;code&quot;:200,
+   &quot;data&quot;: [
+        {
+            &quot;coin_type&quot;: 1,  // 1代表比特币
+            &quot;amount&quot;: 资产数
+        }
+   ]
+}
+</code></pre>
+<h1><a id="POST_1assettogametoken_457"></a>[POST] 1/asset/to-game-token</h1>
+<p>description: 用用户的资产兑换游戏币.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+coin_type: int, any of [BITCOIN = 1]
+amount: number, 要兑换的资产数量
+</code></pre>
+<p>return:</p>
+<pre><code>{  
+   &quot;code&quot;:200,  // 200表示兑换成功，其他表示失败
+}
+</code></pre>
+<h1><a id="POST_1issueadd_473"></a>[POST] 1/issue/add</h1>
+<p>description: 用用户的资产兑换游戏币.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,  // 如果成功，返回200。否则返回其它。
+   &quot;data&quot;: 新建问题的id。这个id用于编辑。
+}
+</code></pre>
+<h1><a id="POST_1issueedit_488"></a>[POST] 1/issue/edit</h1>
+<p>description: 用用户的资产兑换游戏币.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+issue_id: int,  // 用户问题id
+type_id: int,  // 用户问题类型, any of [1充值, 2提现, 3交易, 4安全, 5活动, 6投诉与建议]
+body: string,  // 问题描述
+tel: string,  // 电话
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,  // 如果成功，返回200。否则返回其它。
+}
+</code></pre>
+<p>[POST] 1/issue/remove-image</p>
+<p>========================================<br>
+description: 删除用户问题中的指定图片.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+issue_id: int,  // 用户问题id
+image_id: int,  // 图片id
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,  // 如果成功，返回200。否则返回其它。
+}
+</code></pre>
+<h1><a id="GET_1issuelist_523"></a>[GET] 1/issue/list</h1>
+<p>description: 获取用户问题列表.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+cursor_id: int, // 翻页游标id
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,
+   &quot;data&quot;:[  
+      // ...
+      {  
+        'id':4,
+        'created_at':1529762612,
+        'updated_at':1529762612,
+        'state':1,
+        'type_id':2,
+        'body':'hello'
+      },
+      // ...
+    ],
+   &quot;session&quot;:&quot;57ebff617c8fb1f33e798db5c47a55c8&quot;
+}
+</code></pre>
+<h1><a id="GET_1issueimagelist_551"></a>[GET] 1/issue/image-list</h1>
+<p>description: 获取用户问题对应的上传图片列表.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+issue_id: int,  // 用户问题id
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,
+   &quot;data&quot;:[  
+      // ...
+      {  
+        'id': 23,
+        'path':'aaa/bbb/ccc'  // 图片路径
+      },
+      // ...
+    ],
+   &quot;session&quot;:&quot;57ebff617c8fb1f33e798db5c47a55c8&quot;
+}
+</code></pre>
+<h1><a id="GET_1issuecommentlist_575"></a>[GET] 1/issue/comment-list</h1>
+<p>description: 获取用户问题的反馈.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+issue_id: int,  // 用户问题id
+cursor_id: int, // 翻页游标id
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,
+   &quot;data&quot;:[  
+      // ...
+      {  
+        'created_at':1529765352,
+        'body':'hello'
+      },
+      // ...
+    ],
+   &quot;session&quot;:&quot;57ebff617c8fb1f33e798db5c47a55c8&quot;
+}
+</code></pre>
+<h1><a id="GET_1issuedetail_600"></a>[GET] 1/issue/detail</h1>
+<p>description: 获取单个用户问题详情.<br>
+params:</p>
+<pre><code>session: SESSION_TOKEN
+issue_id: int,  // 用户问题id
+</code></pre>
+<p>return:</p>
+<pre><code>{
+   &quot;code&quot;:200,
+   &quot;data&quot;: {  
+      'id':4,
+      'created_at':1529762612,
+      'updated_at':1529762612,
+      'state':1,  // 1进行中 2已解决
+      'type_id':2,  // 用户问题类型 1充值, 2提现, 3交易, 4安全, 5活动, 6投诉与建议
+      'body':'hello'
+    },
+   &quot;session&quot;:&quot;57ebff617c8fb1f33e798db5c47a55c8&quot;
 }
 </code></pre>
 </body></html>

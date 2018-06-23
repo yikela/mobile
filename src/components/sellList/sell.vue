@@ -48,7 +48,7 @@ export default {
       items: [],
       minirefresh: null,
       maxDataSize: 10,
-      requestDelayTime: 1000,
+      requestDelayTime: 1500,
       dataStamp: [],
       lastId:null
     }
