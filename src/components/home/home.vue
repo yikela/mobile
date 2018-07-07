@@ -88,11 +88,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
- 
+ .home{
+  position: relative;
+  height: 100%;
+ }
 
-  .home .minirefresh-wrap{
-    top:75px
-  }
   .home .minirefresh-theme-default .minirefresh-upwrap {
     display: none !important;
   }

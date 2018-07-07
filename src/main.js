@@ -22,10 +22,15 @@ import { LoadMore } from 'vux'
 Vue.component('load-more', LoadMore)
 
 
+import { Loading } from 'vux'
 
-import VueScroller from 'vue-scroller'
-Vue.use(VueScroller)
+Vue.component('loading', Loading)
 
+
+
+
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 // FastClick.attach(document.body)
 

@@ -8,7 +8,10 @@
     <p>2、协商数量价格</p>
     <p>3、打款给卖家</p>
     <p>4、卖家确认打币</p>
-    <a>查看场外充值地址</a>
+    <p style="margin-top:20px;">
+      <router-link to="/outside/recharge" class="toRecharge"  tag="span">查看场外充值地址</router-link>
+    </p>
+    
     
   </div>
 </template>
@@ -34,7 +37,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
   },
   created(){
@@ -67,5 +70,11 @@ export default {
 .outrecharge p{
   font-size:14px;
   line-height: 1.8
+}
+.toRecharge{
+  padding:3px 10px;
+  border:1px solid #333;
+  color:#000;
+  border-radius:3px;
 }
 </style>

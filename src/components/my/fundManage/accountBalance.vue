@@ -1,8 +1,12 @@
 <template>
   <div class="accountBalance">
-    <p class="toDetail"><router-link to="/accountDetail">账户明细</router-link></p>
+    <!-- <p class="toDetail"><router-link to="/accountDetail">账户明细</router-link></p> -->
+    <loading :show="!loading" text=""></loading>
+    <div v-if="loading">
+
+    
     <h4>账户余额</h4>
-    <x-table :cell-bordered="false" style="background-color:#fff;">
+    <x-table :cell-bordered="false" style="background-color:#fff;" v-if="loading">
         <thead>
           <tr>
             <th>币种</th>
@@ -15,20 +19,21 @@
         <tbody>
           <tr v-for="(i,index) in items" :key="index">
             <td>{{coinType[i.coin_type]}}</td>
-            <th>{{i.amount}}</th>
-            <router-link to="/recharge" tag="th" style="color:blue">充值</router-link>
-            <router-link to="/" tag="th" style="color:blue">提币</router-link>
-            <router-link to="/exchangeList" tag="th" style="color:blue">兑换夺宝币</router-link>
+            <th>{{i.amount | toFixed}}</th>
+            <router-link :to="'/recharge/'+i.coin_type" tag="th" style="color:blue" exact>充值</router-link>
+            <router-link :to="'/withdraw/'+i.coin_type" tag="th" style="color:blue" exact>提币</router-link>
+            <router-link :to="'/exchange/'+i.coin_type" tag="th" style="color:blue" exact>兑换夺宝币</router-link>
           </tr>
-           <tr>
-            <td>夺宝币</td>
+           <tr v-if="coins">
+            <th>夺宝币</th>
             <th>{{coins}}</th>
-            <th>场外充值</th>
-            <th></th>
+            <router-link to="/outside/recharge" tag="th" style="color:blue" exact>场外充值</router-link>
+            <router-link to="/outside/transfer" tag="th" style="color:blue" exact>场外转账</router-link>
             <th></th>
           </tr>
         </tbody>
       </x-table>
+      </div>
 
   </div>
 </template>
@@ -46,29 +51,39 @@ export default {
   name: 'accountBalance',
   data () {
     return {
-      items:[
-        {
-            "coin_type": 1,  // 1代表比特币
-            "amount": 10000
-        }
-      ],
+      items:[],
       coinType:null,
       coins:null,
+      loading:false
     }
   },
   components:{
     XTable
   },
+  filters:{
+    toFixed(str){
+      return Number(str).toFixed(8)
+    }
+  },
   computed:{
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     getList(){
       API.get(API.assetList.url+`?session=${this.userLoginToken}`,{},{}).then(res => {
         if(res.data.code == 200){
-          // this.items = res.data.data
+          this.items = res.data.data;
+          this.loading = true
+        }else if(res.data.code == 401){
+          this.$vux.toast.text(res.data.msg, 'top');
+          this.USER_SIGNOUT();
+          setTimeout(()=>{
+            this.$router.push('/login');
+          },1000)
+        }else{
+          this.$vux.toast.text(res.data.msg, 'top');
         }
       })
     },
@@ -76,6 +91,14 @@ export default {
       API.get(API.getMyCoin.url+`?session=${this.userLoginToken}`,{},{}).then(res => {
         if(res.data.code == 200){
           this.coins = res.data.data
+        }else if(res.data.code == 401){
+          this.$vux.toast.text(res.data.msg, 'top');
+          this.USER_SIGNOUT();
+          setTimeout(()=>{
+            this.$router.push('/login');
+          },1000)
+        }else{
+          this.$vux.toast.text(res.data.msg, 'top');
         }
       })
     }

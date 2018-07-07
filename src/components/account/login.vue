@@ -8,7 +8,7 @@
           <x-input title="密码:" name="password" placeholder="请输入密码" type="password" v-model="password"></x-input>
           <x-button mini plain  @click.native="clickLogin() " class="flex-demo"> 登录</x-button>
           <p>
-            <router-link to="/forgetpwd"  tag="span" class="forget">忘记密码</router-link>
+            <router-link to="/findpwd"  tag="span" class="forget">忘记密码</router-link>
             <router-link to="/register"  tag="span" class="register">注册</router-link>
           </p>
       </div>
@@ -24,6 +24,7 @@ import {
     mapActions
   } from 'vuex'
 import { XInput , XButton} from 'vux'
+import { setTimeout } from 'timers';
 export default {
   name: 'login',
   data () {
@@ -41,9 +42,18 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','']),
     ...mapActions(['userLogout', 'userLogin']),
     clickLogin(){
+      var regPhone = /^1(3|4|5|7|8)\d{9}$/;
+      if (!this.username || !this.password) {
+          this.$vux.toast.text('请填写相关信息', 'top');
+          return false
+      }
+        // if (!regPhone.test(this.username)) {
+        //     this.$vux.toast.text('手机号码格式不正确', 'top');
+        //     return false
+        // }
         const params = {
             username:this.username,
             password:this.password
@@ -51,16 +61,16 @@ export default {
         this.userLogin(params).then(res => {
             if(res.data.code == 200){
               this.USER_SIGNIN(res.data.session);
-              this.$router.push('/');
-              console.log(this.$router)
+              this.$router.replace('/');
             }else{
-              this.$vux.toast.text(res.data.msg.zh, 'top');
+              this.$toast(res.data.msg);
             }
         })
     }
   },
   mounted(){
-      console.log(1111)
+      console.log(this.$router)
+
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-cloak>
     <pub-header :title="headerTitle" v-if="showHeader" @showMyself="showMyself"></pub-header>
     <pub-nav v-if="showNav"></pub-nav>
     <div id="content">
@@ -82,6 +82,9 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
+[v-cloak] {
+    display: none !important;
+}
 .sideBar{
   position: fixed;
   top:0;
@@ -108,10 +111,13 @@ export default {
   }
 
 
+  .fontSize{
+    font-size:14px;
+  }
 
-body {
-  background-color: #fff;
-}
+
+
+
 
   [v-cloak] {
         display: none
@@ -226,12 +232,26 @@ body {
       list-style: none;
     }
 
+  html,body {
+    background-color: #fff;
+    width: 100%;
+     height: 100%
+  }
     #app{
       width: 100%;
       max-width: 500px;
       margin:auto;
+      height: 100%
     }
     #content{
+      width: 100%;
+      max-width: 500px;
       padding-top:80px;
+      height: 100%
+    }
+    #minirefresh{
+      width: 100%;
+      max-width: 500px;
+      height: 100%
     }
 </style>

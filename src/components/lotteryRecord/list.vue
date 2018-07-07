@@ -10,7 +10,7 @@
           <p>标题：{{item.description.name}}</p>
           <p><span class="winner">获得者：{{item.winner_username}} </span><span class="total">夺宝：{{item.price}}人次</span></p>
           <p>商品价值：{{item.price}}平台币</p>
-          <p>揭晓时间：{{item.updated_at | dateFormat}}</p>
+          <p>揭晓时间：{{item.updated_at*1000 | dateFormat}}</p>
           <p>中奖号码：{{item.calc_result}}</p>
           <router-link class="moreDetail" :to="{name: 'winnerDetail', params: { id: item.id}}">查看详情</router-link>
         </div>
@@ -38,7 +38,7 @@ export default {
       items: [],
       minirefresh: null,
       maxDataSize: 10,
-      requestDelayTime: 600,
+      requestDelayTime: 1000,
       dataStamp: [],
     }
   },
@@ -52,22 +52,32 @@ export default {
     dateFormat
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     get_list(){
-      API.get(API.winners.url,{},{}).then(res => {
+      let url = null;
+      if(this.lastId){
+        url = API.winners.url + `?cursor_id=${this.lastId}`;
+      }else{
+        url = API.winners.url
+      }
+      API.get(url,{},{}).then(res => {
         if(res.data.code ==200){
           this.dataStamp =  res.data.data;
+          this.lastId = res.data.data[res.data.data.length -1].id
         }
       })
     },
     downCallback() {
         var self = this;
+        self.lastId = null;
         self.get_list();
         console.log('下拉')
         setTimeout(() =>{
-          self.item = self.dataStamp;
-            self.miniRefresh.endDownLoading(true);
+          self.$nextTick(() => {
+            self.items = self.dataStamp;
+          })
+          self.miniRefresh.endDownLoading(true);
         }, self.requestDelayTime);
     },
     upCallback() {
@@ -103,13 +113,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.minirefresh-wrap{
-  top:75px
+.minirefresh-totop{
+  display: none;
 }
-/* .selllist{
-  height: 646px;
-  overflow-y: scroll
-} */
+.winnerList{
+  height:100%;
+  position: relative;
+}
 .item{
   width: 100%;
   padding:10px;

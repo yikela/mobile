@@ -25,14 +25,21 @@
         <cell title="资产管理"  is-link  link="/accountBalance" class="cell" @click.native="hideMyself()"></cell>
       </group>
 
+      <group  label-align="right">
+        <cell title="我的邀请"  is-link class="cell" link="/my/invite" @click.native="hideMyself()"></cell>
+      </group>
+
+      <group  label-align="right" v-if="userLoginToken">
+        <cell title="资金密码"  is-link class="cell" link="/my/cashpwd" @click.native="hideMyself()" ></cell>
+      </group>
 
       <group  label-align="right">
-        <cell title="邀请有奖"  is-link class="cell" link="/home" @click.native="hideMyself()"></cell>
+        <cell title="问题反馈"  is-link class="cell" link="/question" @click.native="hideMyself()"></cell>
       </group>
 
     
 
-      <x-button @click.native="logOut()" v-if="userLoginToken" class="logOut">退出登录</x-button>
+      <x-button @click.native="logOut()" v-if="userLoginToken" class="logOut fontSize" >退出登录</x-button>
   </div>
 
 </template>
@@ -89,9 +96,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.cell{
+.cell,.wfontSize{
   font-size:14px;
 }
+
 .xheader{
   background:#333333;
 }
@@ -130,5 +138,8 @@ export default {
   position: fixed;
   bottom:20px;
   left:0;
+  height:35px;
+  line-height: 35px;
+  font-size:14px;
 }
 </style>

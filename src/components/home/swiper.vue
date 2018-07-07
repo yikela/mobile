@@ -2,7 +2,10 @@
   <div class="swiperContent">
     <swiper loop auto height="4rem">
       <swiper-item class="swiper-demo-img" v-for="(item, index) in items" :key="index">
-        <img :src="item.img">
+        <router-link to="/swiper/detail">
+          <img :src="item.img">
+        </router-link>
+        
       </swiper-item>
     </swiper>
   </div>
@@ -32,7 +35,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     getList(){
       API.get(API.swiperList.url,{},{}).then(res => {

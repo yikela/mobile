@@ -1,10 +1,11 @@
 <template>
   <div id="login">
+      <a href="javascript:history.back(-1)">返回</a>
       <h1>赢夺宝</h1>
       <p>全球首家区块链夺宝平台</p>
       <div class="content"> 
           <x-input title="手机号码:" name="username" placeholder="请输入手机号码" type="text" v-model.trim="phone" class="phone"></x-input>
-          <span v-if="sendMsgDisabled" class="sendCode">{{time+'s后获取'}}</span>
+          <span v-if="sendMsgDisabled" class="sendCode times">{{time+'s后获取'}}</span>
           <span v-if="!sendMsgDisabled" class="sendCode" @click="sendCode()">发送验证码</span>
           <x-input title="验证码:" name="messagecode" placeholder="请输入验证码" type="text" v-model.trim="messagecode"></x-input>
           <x-input title="设置密码:" name="password" placeholder="请输入密码" type="password" v-model.trim="password"></x-input>
@@ -46,7 +47,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     clickRegister(){
       var regPhone = /^1(3|4|5|7|8)\d{9}$/;
@@ -116,6 +117,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  #login a{
+    position: fixed;
+    top:10px;
+    left:10px;
+    padding:3px 10px;
+    border:1px solid #333;
+    color:#000;
+    border-radius:3px;
+  }
   #login{
     margin-top:-20px;
   }
@@ -189,5 +199,8 @@ export default {
   }
   #login .content p .register{
     float: right;
+  }
+  .times{
+    color:#999
   }
 </style>

@@ -30,7 +30,10 @@ export default {
     top:45px;
     position: fixed;
     left:0;
-    z-index:99
+    z-index:99;
+    max-width: 500px;
+    right:0;
+    margin:auto;
   }
   #navv ul {
     width:100%;
@@ -44,6 +47,7 @@ export default {
     height: 35px;
     line-height: 35px;
     color: #fff;
+    cursor: pointer;
   }
   #navv ul li.u-link--Active{
     color:#00bfff

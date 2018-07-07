@@ -1,5 +1,7 @@
 <template>
   <div id="goodsdetail">
+    <loading :show="!loading" text=""></loading>
+    <div v-if="loading">
     <div class="item">
         <img src="../../assets/bit.jpg" alt="">
         <div class="middle">
@@ -13,7 +15,7 @@
                 <li>{{item.price}}</li>
                 <li>{{ item.remaining}}</li>
                 <li>已参与</li>
-                <li>总人数</li>
+                <li>总人次</li>
                 <li>剩余</li>
               </ul>
             </div>
@@ -23,10 +25,10 @@
 
       <div>
           <group>
-          <x-number :title="'我要购买:'" :min="1" :max="item.remaining" v-model="number" fillable></x-number>
+            <x-number :title="'我要购买:'" :min="1" :max="item.remaining" v-model="number" fillable></x-number>
           </group>
 
-          <x-button  type="primary" style="margin-top:20px;" @click.native="buyGoods()"> 购买</x-button>
+          <x-button  type="primary" style="margin-top:20px;font-size:14px" @click.native="buyGoods()"> 购买</x-button>
       </div>
     <div class="resultTab">
       <tab>
@@ -43,8 +45,8 @@
         </thead>
         <tbody >
 
-          <load-more tip="正在加载" :show-loading="true" v-if="loading"></load-more>
-          <tr v-for="(item,index) in allResultDetail" :key="index" v-if="allResultDetail.length != 0 && !loading">
+          <!-- <load-more tip="正在加载" :show-loading="true" v-if="loading"></load-more> -->
+          <tr v-for="(item,index) in allResultDetail" :key="index" v-if="allResultDetail.length != 0 && loading">
             <td>{{item.created_at * 1000 | dateFormat}}</td>
             <td>{{item.username}}</td>
             <td> {{item.buy_count}}</td>
@@ -53,6 +55,12 @@
           <load-more :show-loading="false" tip="暂无数据" background-color="#fbf9fe" style="width:100%;text-align:center"  v-if="allResultDetail.length == 0 && !loading"></load-more>
         </tbody>
       </x-table>
+      <div v-if="tempItems.length == 10 & loading" class="more"  @click="getBoughtInfo()">
+            加载更多
+      </div>
+      <div v-if="tempItems.length < 10 & loading" class="more" style="color:#999">
+        已全部加载
+      </div>
       </div>
       <div class="resultDetail"  v-if="loginAlert && !loading" style="text-align:center;padding:20px 0;">
           请登录后查看
@@ -70,7 +78,7 @@
       @on-hide="onHide">
         <p style="text-align:center;font-size:16px;"> 查看我的订单？</p>
       </confirm>
-
+</div>
   </div>
 </template>
 
@@ -91,11 +99,14 @@ export default {
       },
       id:null,
       resultType:'allResult',
-      allResultDetail:null,
-      loginAlert:true,
+      allResultDetail:[],
+      loginAlert:false,
       number:1,
       show:false,
-      loading:true
+      loading:false,
+      lastId:null,
+      tempItems:[],
+
     }
   },
   components:{
@@ -115,7 +126,7 @@ export default {
     dateFormat,
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     getDetail(){
       API.get(API.goodDetial.url,{id:this.id},{}).then(res => {
@@ -125,16 +136,55 @@ export default {
         }
       })
     },
-    getBoughtInfo(){
-      API.get(API.boughtList.url+'?sell_id='+this.id + '&session='+this.userLoginToken,{},{}).then(res => {
-        console.log(res)
+    // getBoughtInfo(){
+    //   API.get(API.boughtList.url+'?sell_id='+this.id + '&session='+this.userLoginToken,{},{}).then(res => {
+    //     console.log(res)
+    //     if(res.data.code == 200){
+    //         this.allResultDetail = res.data.data;
+    //         this.loginAlert = false;
+    //         this.loading = true 
+    //     }else if(res.data.code == 401){
+    //       this.$vux.toast.text(res.data.msg, 'top');
+    //       this.USER_SIGNOUT();
+    //       setTimeout(()=>{
+    //         this.$router.push('/login');
+    //       },1000)
+    //     }else{
+    //       this.loginAlert = true;
+    //       this.loading = true 
+    //       this.$vux.toast.text(res.data.msg, 'top');
+    //     }
+    //   })
+    // },
+      getBoughtInfo(){
+      let url = null;
+      if(this.lastId){
+        url = API.boughtList.url + `?sell_id=${this.id}&session=${this.userLoginToken}&cursor_id=${this.lastId}`;
+      }else{
+        url = API.boughtList.url+`?sell_id=${this.id}&session=${this.userLoginToken}`
+      }
+      API.get(url,{},{}).then(res => {
         if(res.data.code == 200){
+          if(this.lastId){
+              this.allResultDetail = this.allResultDetail.concat(res.data.data);
+          }else{
             this.allResultDetail = res.data.data;
-            this.loginAlert = false;
-            this.loading = false 
+          }
+          
+          this.tempItems = res.data.data;
+          this.lastId = res.data.data[res.data.data.length -1].id;
+          this.loginAlert = false;
+          this.loading = true
+        }else if(res.data.code == 401){
+          this.$vux.toast.text(res.data.msg, 'top');
+          this.USER_SIGNOUT();
+          setTimeout(()=>{
+            this.$router.push('/login');
+          },2000)
         }else{
-            this.loginAlert = true;
-            this.loading = false 
+          this.loginAlert = true;
+          this.loading = true 
+          this.$vux.toast.text(res.data.msg, 'top');
         }
       })
     },
@@ -185,9 +235,11 @@ export default {
 <style>
 #goodsdetail .vux-number-selector{
     height: 30px !important;
+    font-size: 14px
 }
 #goodsdetail .vux-number-input{
     height: 30px !important;
+    font-size: 14px
 }
 #goodsdetail .resultTab{
   margin-top:20px;
@@ -316,4 +368,10 @@ export default {
       -o-transition: width 0.6s ease;  
       transition: width 0.6s ease;  
     } 
+
+    .more{
+      text-align:center;
+      width:100%;
+      padding:10px 0
+    }
 </style>

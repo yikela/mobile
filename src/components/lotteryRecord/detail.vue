@@ -6,7 +6,7 @@
           <p>{{item.description['round no']}}期  {{item.description.name}}夺宝</p>
           <p><span class="winner">获得者：{{item.winner_username}} </span><span class="total">夺宝：{{item.price}}人次</span></p>
           <p>商品价值：{{item.price}}平台币</p>
-          <p>揭晓时间：{{item.updated_at | dateFormat}}</p>
+          <p>揭晓时间：{{item.updated_at*1000 | dateFormat}}</p>
           <p>中奖号码：{{item.calc_result}}</p>
         </div>
     </div>
@@ -30,11 +30,12 @@
             <td>{{item.username}}</td>
             <td> {{item.buy_count}}</td>
           </tr>
-          <tr  v-if="allResultDetail.length == 0" style="text-align:center">
-            暂无数据
-          </tr>
+          
         </tbody>
       </x-table>
+      <p v-if="allResultDetail.length == 0" style="text-align:center">
+        暂无数据
+      </p>
       </div>
       <div class="resultDetail"  v-if="resultType === 'allResult' && loginAlert" style="text-align:center;padding:20px 0;">
           请登录后查看
@@ -63,7 +64,7 @@ export default {
       },
       id:null,
       resultType:'allResult',
-      allResultDetail:null,
+      allResultDetail:[],
       loginAlert:true,
     }
   },
@@ -80,7 +81,7 @@ export default {
     dateFormat
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     getDetail(){
       API.get(API.goodDetial.url,{id:this.id},{}).then(res => {
@@ -96,8 +97,15 @@ export default {
         if(res.data.code == 200){
             this.allResultDetail = res.data.data;
             this.loginAlert = false 
+        }else if(res.data.code == 401){
+          this.$vux.toast.text(res.data.msg, 'top');
+          this.USER_SIGNOUT();
+          setTimeout(()=>{
+            this.$router.push('/login');
+          },1000)
         }else{
-            this.loginAlert = true
+         this.loginAlert = true
+          // this.$vux.toast.text(res.data.msg, 'top');
         }
       })
     },
@@ -119,7 +127,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .resultTab{
-  margin-top:20px;
+  margin-top:10px;
 }
 .resultDetail{
   width: 100%;
@@ -136,7 +144,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 100px;
+  height: 120px;
 }
 .item img{
   width: 90px;

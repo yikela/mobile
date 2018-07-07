@@ -42,7 +42,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     showMyself(){
       this.$emit('showMyself', true);
@@ -67,7 +67,10 @@ export default {
     height: 45px;
     line-height: 45px;
     background:#333333;
-    z-index:99
+    z-index:99;
+    max-width: 500px;
+    right:0;
+    margin:auto;
   }
     #xHeader p {
         position: absolute;

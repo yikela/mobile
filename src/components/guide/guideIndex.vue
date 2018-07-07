@@ -5,7 +5,7 @@
     <p><router-link to="/guide/treasure">二、如何夺宝？</router-link></p>
     <p><router-link to="/guide/outRecharge">三、如何场外充值？</router-link></p>
     <p><router-link to="/guide/winningRules">四、中奖规则？</router-link></p>
-    <p><router-link to="/guide/question">五、问题反馈</router-link></p>
+    <!-- <p><router-link to="/guide/question">五、问题反馈</router-link></p> -->
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
   },
   created(){

@@ -51,15 +51,16 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     clickRegister(){
-      var regPhone = /^1(3|4|5|7|8)\d{9}$/;
+     
       var regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
       if(!this.phone || !this.messagecode || !this.password || !this.secPassword || !this.email){
         alert('请填写相关信息');
         return false
       }
+       var regPhone = /^1(3|4|5|7|8)\d{9}$/;
       if (!regPhone.test(this.phone)) {
           alert('手机号码格式不正确');
           return false

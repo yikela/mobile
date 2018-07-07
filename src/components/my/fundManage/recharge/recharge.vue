@@ -4,25 +4,23 @@
     <p class="tip">需要1个网络确认才能到账，任何非BTC资产充值到BTC地址后不可找回！</p>
 
     <group class="groupBorder">
-      <cell title="选择币种" :value="type" is-link  @click.native="showPopup=true"></cell>
+      <cell title="币种" :value="type" class="fontSize"></cell>
+      <!-- <cell title="选择币种" :value="type" is-link  @click.native="showPopup=true"></cell> -->
     </group>
-    <popup v-model="showPopup" class="checker-popup">
+    <!-- <popup v-model="showPopup" class="checker-popup">
         <div style="padding:10px 10px 40px 10px;">
           <p style="padding: 5px 5px 5px 2px;color:#888;">币的种类</p>
           <checker v-model="type" default-item-class="type-item" selected-item-class="type-item-selected">
             <checker-item value="BTC" @on-item-click="onItemClick"> BTC </checker-item>
-            <!-- <checker-item value="ETH" @on-item-click="onItemClick">  ETH  </checker-item>
-            <checker-item value="ETC" @on-item-click="onItemClick">  ETC  </checker-item>
-            <checker-item value="BCH" @on-item-click="onItemClick">  BCH  </checker-item> -->
           </checker>
         </div>
-      </popup>
+      </popup> -->
       <div style="text-align:center;margin-top:15px;">
         <qrcode :value="ad" type="img"></qrcode>
       </div>
       <div style="width:100%;margin:20px 0;text-align:center">{{ad}}</div>
       <div style="display:flex;justify-content:center;align-items:center">
-        <button class="btnCopy">复制多重签名</button>
+        <button type="button" v-clipboard:copy="ad" v-clipboard:success="onCopy" v-clipboard:error="onError" class="btnCopy">复制多重签名</button>
       </div>
       
     <br>
@@ -44,8 +42,9 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       showPopup:false,
-      type:'BTC',
-      ad:''
+      type:null,
+      ad:'',
+      typeId:null,
     }
   },
   components:{
@@ -62,7 +61,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     onItemClick(value){
       if (!this.disabled) {
@@ -74,12 +73,28 @@ export default {
       API.get(API.getRechargeAd.url,{session:this.userLoginToken,type:value},{}).then(res => {
         if(res.data.code == 200){
           this.ad = res.data.data
+        }else if(res.data.code == 401){
+          this.$vux.toast.text(res.data.msg, 'top');
+          this.USER_SIGNOUT();
+          setTimeout(()=>{
+            this.$router.push('/login');
+          },1000)
+        }else{
+          this.$vux.toast.text(res.data.msg, 'top');
         }
       })
+    },
+    onCopy: function (e) {
+      this.$vux.toast.text('复制成功', 'bottom');
+    },
+    onError: function (e) {
+      this.$vux.toast.text('复制失败', 'bottom');
     }
   },
   created(){
-
+    this.typeId = this.$route.params.id;
+    this.type = coinType[this.$route.params.id];
+    console.log(this.typeId,this.type)
   },
   mounted(){
     this.getAddress(1)
@@ -129,5 +144,8 @@ export default {
   background: #fff;
   box-shadow: none;
   border:1px solid #000
+}
+.fontSize{
+  font-size:14px;
 }
 </style>

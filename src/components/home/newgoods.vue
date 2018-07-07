@@ -2,12 +2,12 @@
     <div class="items">
       <p class="itemTitle">
        <span class="title">最新上架</span>
-        <span class="more">更多··· </span>
+        <router-link class="showMore" to="/sell" tag="span">更多··· </router-link>
       </p>
       <div class="itemList">
         <div class="item" v-for="(item,index) in items" :key="index">
             <div class="price">
-              <h4> 1BTC</h4>
+              <h4> 1{{coinType[item.coin_type]}}</h4>
               <p>价值{{item.price}}</p>
             </div>
             <div class="progress">
@@ -19,7 +19,7 @@
                 <li>{{item.price}}</li>
                 <li>{{ item.remaining}}</li>
                 <li>已参与</li>
-                <li>总人数</li>
+                <li>总人次</li>
                 <li>剩余</li>
               </ul>
             </div>
@@ -36,12 +36,13 @@ import {
     mapMutations,
     mapActions
   } from 'vuex'
-
+import coinType from '../../utils/coin_type'
 export default {
   name: 'temp',
   data () {
     return {
       items:null,
+      coinType:null,
     }
   },
   components:{
@@ -51,7 +52,7 @@ export default {
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN']),
+    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
     ...mapActions(['userLogout', 'userLogin']),
     getList(){
       API.get(API.newsgoods.url,{},{}).then(res => {
@@ -62,7 +63,7 @@ export default {
     }
   },
   created(){
-
+    this.coinType = coinType
   },
   mounted(){
     this.getList()
@@ -80,7 +81,7 @@ export default {
     padding:0 10px;
     color: #fff;
   }
-  .itemTitle span.more{
+  .itemTitle span.showMore{
     float: right;
   }
   .itemList{

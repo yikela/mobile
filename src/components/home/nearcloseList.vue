@@ -1,8 +1,6 @@
 <template>
-  <div class="sellList">
-  <div id="minirefresh" class="minirefresh-wrap">
-                
-  <div class="minirefresh-scroll">
+    <div class="items">
+    <h4>即将开奖</h4>
     <div class="itemBox">
       <div class="item" v-for="(item,index) in items" :key="index">
         <img src="../../assets/bit.jpg" alt="">
@@ -22,18 +20,14 @@
               </ul>
             </div>
         </div>
-        <router-link class="buy" :disabled="item.remaining == 0 ? true:false"   tag="button" :to="{name: 'goodsDetail', params: { id: item.id}}">我要购买</router-link>
+        <router-link class="buy" disabled  tag="button" :to="{name: 'goodsDetail', params: { id: item.id}}">我要购买</router-link>
 
       </div>
       </div>
-      </div>
-      </div>
-  </div>
+    </div>
 </template>
 
 <script>
-import MiniRefreshTools from 'minirefresh';
-import 'minirefresh/dist/debug/minirefresh.css'
 import {
     mapState,
     mapGetters,
@@ -45,88 +39,43 @@ export default {
   name: 'temp',
   data () {
     return {
-      items: [],
-      minirefresh: null,
-      maxDataSize: 10,
-      requestDelayTime: 1000,
-      dataStamp: [],
-      lastId:null
+      items:null,
     }
   },
   components:{
+
   },
   computed:{
     ...mapGetters(['userLoginToken']),
   },
   methods:{
-    ...mapMutations(['USER_SIGNIN','USER_SIGNOUT']),
+    ...mapMutations(['USER_SIGNIN']),
     ...mapActions(['userLogout', 'userLogin']),
-    get_list(){
-      let url = null;
-      if(this.lastId){
-        url = API.newsgoods.url + `?cursor_id=${this.lastId}`;
-      }else{
-        url = API.newsgoods.url
-      }
-      API.get(url,{},{}).then(res => {
+    getList(){
+      API.get(API.nearClose.url,{},{}).then(res => {
         if(res.data.code ==200){
-          this.dataStamp =  res.data.data;
-          this.lastId = res.data.data[res.data.data.length -1].id
+          this.items = res.data.data
         }
       })
-    },
-    downCallback() {
-        var self = this;
-        self.lastId = null;
-        self.get_list();
-        console.log('下拉')
-        setTimeout(() =>{
-          self.$nextTick(() => {
-            self.items = self.dataStamp;
-          })
-          self.miniRefresh.endDownLoading(true);
-        }, self.requestDelayTime);
-    },
-    upCallback() {
-        var self = this;
-        console.log('上拉');
-        self.get_list()
-        setTimeout(function() {
-            self.items = self.items.concat(self.dataStamp);
-            self.miniRefresh.endUpLoading(self.dataStamp.length < self.maxDataSize ? true : false);
-        }, self.requestDelayTime);
-    },
+    }
   },
   created(){
-    
+
   },
   mounted(){
-    var self = this;
-    // self.get_list()
-    self.miniRefresh = new MiniRefresh({
-      container: '#minirefresh',
-      down: {
-          callback: self.downCallback
-      },
-      isScrollBar:false,
-      up: {
-          isAuto: true,
-          offset: 0,
-          callback: self.upCallback
-      }
-  });
+    this.getList()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.minirefresh-totop{
-  display: none;
-}
-.sellList{
-  height:100%;
-  position: relative;
+h4{
+  width: 100%;
+  text-align: center;
+  height:40px;
+  line-height: 40px;
+  margin:5px 0;
 }
 .item{
   width: 100%;
