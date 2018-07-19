@@ -20,7 +20,7 @@
               </ul>
             </div>
         </div>
-        <router-link class="buy" disabled  tag="button" :to="{name: 'goodsDetail', params: { id: item.id}}">我要购买</router-link>
+        <router-link class="buy" :disabled="item.remaining == 0 ? true:false"  tag="button" :to="{name: 'goodsDetail', params: { id: item.id}}">我要购买</router-link>
 
       </div>
       </div>

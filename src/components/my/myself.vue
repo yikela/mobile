@@ -13,29 +13,13 @@
           <span>个人中心</span>
         </p>
     </div>
-
-
-      <group  label-align="right">
-        <cell title="我的订单"  is-link class="cell" link="/my/order" @click.native="hideMyself()"></cell>
-      </group>
-      
-      
-
-      <group  label-align="right">
-        <cell title="资产管理"  is-link  link="/accountBalance" class="cell" @click.native="hideMyself()"></cell>
-      </group>
-
-      <group  label-align="right">
-        <cell title="我的邀请"  is-link class="cell" link="/my/invite" @click.native="hideMyself()"></cell>
-      </group>
-
-      <group  label-align="right" v-if="userLoginToken">
-        <cell title="资金密码"  is-link class="cell" link="/my/cashpwd" @click.native="hideMyself()" ></cell>
-      </group>
-
-      <group  label-align="right">
-        <cell title="问题反馈"  is-link class="cell" link="/question" @click.native="hideMyself()"></cell>
-      </group>
+    <group  label-align="right">
+      <cell title="我的订单"  is-link class="cell" link="/my/order" @click.native="hideMyself()"></cell>
+      <cell title="资产管理"  is-link  link="/accountBalance" class="cell" @click.native="hideMyself()"></cell>
+      <cell title="我的邀请"  is-link class="cell" link="/my/invite" @click.native="hideMyself()"></cell>
+      <cell title="资金密码"  is-link class="cell" link="/my/cashpwd" @click.native="hideMyself()" ></cell>
+      <cell title="问题反馈"  is-link class="cell" link="/question" @click.native="hideMyself()"></cell>
+    </group>
 
     
 
